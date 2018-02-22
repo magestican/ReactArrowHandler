@@ -3,8 +3,8 @@ import React from 'react';
 class ReactArrowHandler  extends React.Component {
 
   render() {
-    let {left,right,top,down};
-    let copies = React.Children.map(this.props.children, (child, i) => {
+    let {left,right,top,down} = this.props;
+    let copies = React.Children.map(this.props.children[0], (child, i) => {
       let copy = React.cloneElement(child, {
         onKeyDown: (e) => {
             if (e.keyCode === 37){
@@ -32,4 +32,4 @@ class ReactArrowHandler  extends React.Component {
   }
 }
 
-export ReactArrowHandler;
+export default ReactArrowHandler;
