@@ -37,18 +37,32 @@ class ReactArrowHandler  extends React.Component {
 
       let object = findDOMNode(this);
 
-      let parent = object,
-          divs = parent.querySelectorAll('div'),
-          elementList = [...divs].filter(e => e.innerHTML == elementText.trim());
+      let parent = object;
 
-      if (elementList){
+      let elementList = [];
+      let findListOf = (typeOfElement) => {
+        let elementsOfType = parent.querySelectorAll(typeOfElement);
+        return [...elementsOfType].filter(e => e.innerHTML.trim() == elementText.trim());
+      }
+      elementList = findListOf('div')
+      if (elementList.length == 0)
+        elementList = findListOf('span');
+
+      if (elementList && elementList.length > 0){
+        
         if (currentHoveredElement){
           currentHoveredElement.className = currentHoveredElement.className.replace('hovered',' ');
         }
         let elementToModify = elementList[elementList.length - 1]; // get the last element
 
-        if (elementToModify.parentElement.className.includes('item') && !elementToModify.parentElement.className.includes('dropdown')) // in case this is a nested item
+        let parentIsTheActualNavigationItem = () => {
+          return elementToModify.parentElement.className.includes('item') && !elementToModify.parentElement.className.includes('dropdown')
+        }
+        if (parentIsTheActualNavigationItem()) {// in case this is a nested item
           elementToModify = elementToModify.parentElement;
+          if (parentIsTheActualNavigationItem()) // second level
+            elementToModify = elementToModify.parentElement;
+        }
         elementToModify.className += ' hovered ';
         if (elementToModify.scrollIntoView){
           elementToModify.scrollIntoView();
